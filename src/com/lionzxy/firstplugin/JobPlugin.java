@@ -90,12 +90,12 @@ public class JobPlugin extends JavaPlugin{
                 if(args[2]!=null){
                     String description = "";
                     for(int i = 2; i < args.length; i++)
-                        description=description+args[i];
+                        description=description+" "+args[i];
                     Config.addReq(args[1],description,player);
                     player.sendMessage(ChatColor.AQUA + "Req added! Job: "+args[1]+". Description: "+description);
                 } else player.sendMessage(ChatColor.RED + "You have already req fo this job!");
             }else player.sendMessage(ChatColor.RED +"This command request enter jobname and description!(Ex. '/req add Farmer I want farmer for my sexual fantasy' add req Farmer with description)");
-        }}catch (NullPointerException e){player.sendMessage(ChatColor.RED +"This command request enter jobname and description!(Ex. '/req add Farmer I want farmer for my sexual fantasy' add req Farmer with description)");}
+        }}catch (NullPointerException e){player.sendMessage(ChatColor.DARK_PURPLE +"This command request enter jobname and description!(Ex. '/req add Farmer I want farmer for my sexual fantasy' add req Farmer with description)");}
         //req remove
         try{
         if(args[0].equalsIgnoreCase("remove"))
