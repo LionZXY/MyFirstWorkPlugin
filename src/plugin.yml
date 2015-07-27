@@ -1,0 +1,9 @@
+main: com.lionzxy.firstplugin.JobPlugin
+version: 1.0
+name: JobPlugin
+
+commands:
+  job:
+    description: Add a job. (Ex. '/job add Farmer' add job Farmer)
+  req:
+    description: Add a req for select job (Ex. '/req add Farmer Descriptiont' add req Farmer with description)
