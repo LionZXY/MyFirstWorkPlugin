@@ -20,14 +20,13 @@ public class JobPlugin extends JavaPlugin{
     public void onEnable(){
         PluginDescriptionFile pdfFile= getDescription();
         Logger logger = Logger.getLogger("Minecraft");
-
         Config.onEnable(this);
-
         logger.info(pdfFile.getName()+" load plugin");
     }
     public void onDisable(){
         PluginDescriptionFile pdfFile= getDescription();
         Logger logger = Bukkit.getLogger();
+        this.saveConfig();
         logger.info(pdfFile.getName()+" unload plugin");
 
     }
@@ -35,9 +34,8 @@ public class JobPlugin extends JavaPlugin{
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(label.equalsIgnoreCase("job"))
-            if((command instanceof Player&&((Player)sender).isOp())||!(command instanceof Player))
-                return job(sender,args);
-            else sender.sendMessage(ChatColor.RED + "You don't have permission");
+             return job(sender,args);
+
         else if(label.equalsIgnoreCase("req")){
             req((Player)sender,args);}
 
@@ -45,36 +43,53 @@ public class JobPlugin extends JavaPlugin{
     }
 
     public boolean job(CommandSender sender,String[] args){
-        //job add %nickname%
-        try{
-        if (args[0].equalsIgnoreCase("add")) {
-                String itog = args[1];
-            if(args.length>1)
-                for(int i = 2; i < args.length; i++)
-                   itog=itog+" "+args[i];
-                Config.addJob(itog);
-                sender.sendMessage(ChatColor.AQUA + "Add job: " + itog);
-                return false;
-        }}catch (NullPointerException e){sender.sendMessage(ChatColor.RED + "This command request enter jobname!(Ex. '/job add Farmer' add job Farmer)");}
-        //job remove %nickname%
-        try{
-        if (args[0].equalsIgnoreCase("remove")) {
-            if (args[1] != null) {
-                if (Config.removeJob(args[1]))
-                    sender.sendMessage(ChatColor.AQUA + "Remove job: " + args[1]);
-                else {
-                    sender.sendMessage(ChatColor.RED + "Job not found!");
-                    printAllJob(sender);
+        if((sender instanceof Player&&((Player)sender).isOp())||!(sender instanceof Player)) {
+            //job add %nickname%
+            try {
+                if (args[0].equalsIgnoreCase("add")) {
+                    String itog = args[1];
+                    if (args.length > 2)
+                        for (int i = 2; i < args.length; i++)
+                            itog = itog + " " + args[i];
+                    Config.addJob(itog, sender);
+                    return false;
                 }
-            } else
+            } catch (NullPointerException e) {
+                sender.sendMessage(ChatColor.RED + "This command request enter jobname!(Ex. '/job add Farmer' add job Farmer)");
+            }
+            //job remove %nickname%
+            try {
+                if (args[0].equalsIgnoreCase("remove")) {
+                    if (args.length>=2) {
+                        if (Config.removeJob(args[1]))
+                            sender.sendMessage(ChatColor.GREEN + "Remove job: " + args[1]);
+                        else {
+                            sender.sendMessage(ChatColor.RED + "Job not found!");
+                            printAllJob(sender);
+                        }
+                    } else
+                        sender.sendMessage(ChatColor.RED + "This command request enter jobname!(Ex. '/job remove Farmer' remove job Farmer)");
+                }
+            } catch (NullPointerException e) {
                 sender.sendMessage(ChatColor.RED + "This command request enter jobname!(Ex. '/job remove Farmer' remove job Farmer)");
-        }}catch(NullPointerException e) {
-            sender.sendMessage(ChatColor.RED + "This command request enter jobname!(Ex. '/job remove Farmer' remove job Farmer)");}
+            }
+                if(args[0].equalsIgnoreCase("reload")){
+                    onDisable();
+                    onEnable();
+                }
 
+        }else sender.sendMessage(ChatColor.RED + "You don't have permission");
         if(args[0].equalsIgnoreCase("list")){
             for(String a : Config.jobList){
-                sender.sendMessage(ChatColor.AQUA+a);
+                sender.sendMessage(ChatColor.GREEN+a);
             }
+        }
+        if(args[0].equalsIgnoreCase("help")){
+            sender.sendMessage(ChatColor.BLUE+"=============================================================================================");
+            sender.sendMessage(ChatColor.BLUE+"/job add %jobname% - Add a new job. "+ChatColor.RED+"Only for admin");
+            sender.sendMessage(ChatColor.BLUE+"/job remove %jobname% - Remove a job and all req fo this job. "+ChatColor.RED+"Only for admin");
+            sender.sendMessage(ChatColor.BLUE+"/job list %jobname% - List all job on this server ");
+            sender.sendMessage(ChatColor.BLUE+"=============================================================================================");
         }
         return false;}
 
@@ -87,14 +102,14 @@ public class JobPlugin extends JavaPlugin{
         try{
         if(args[0].equalsIgnoreCase("add")){
             if(!Utils.checkToReq(args[1],player.getDisplayName())&&Config.findJob(args[1])){
-                if(args[2]!=null){
+                if(args.length>=3){
                     String description = "";
                     for(int i = 2; i < args.length; i++)
                         description=description+" "+args[i];
                     Config.addReq(args[1],description,player);
-                    player.sendMessage(ChatColor.AQUA + "Req added! Job: "+args[1]+". Description: "+description);
-                } else player.sendMessage(ChatColor.RED + "You have already req fo this job!");
-            }else player.sendMessage(ChatColor.RED +"This command request enter jobname and description!(Ex. '/req add Farmer I want farmer for my sexual fantasy' add req Farmer with description)");
+                    player.sendMessage(ChatColor.GREEN + "Req added! Job: "+args[1]+". Description: "+description);
+                } else player.sendMessage(ChatColor.RED + "You don't enter description for job!This command request enter jobname and description!(Ex. '/req add Farmer I want farmer for my sexual fantasy' add req Farmer with description)");
+            }else player.sendMessage(ChatColor.RED +"You have already req fo this job! ");
         }}catch (NullPointerException e){player.sendMessage(ChatColor.DARK_PURPLE +"This command request enter jobname and description!(Ex. '/req add Farmer I want farmer for my sexual fantasy' add req Farmer with description)");}
         //req remove
         try{
@@ -105,7 +120,7 @@ public class JobPlugin extends JavaPlugin{
         }
         //req top
         if(args[0].equalsIgnoreCase("top")){
-            player.sendMessage(ChatColor.AQUA+"Top req for job");
+            player.sendMessage(ChatColor.GREEN+"Top req for job");
             String[] arr = new String[Config.jobList.size()];
             for(int i = 0; i < Config.jobList.size(); i++){
                 arr[i]=Config.jobList.get(i);
@@ -125,10 +140,16 @@ public class JobPlugin extends JavaPlugin{
         }
         try{
         if(args[0].equalsIgnoreCase("list")){
-            player.sendMessage(ChatColor.AQUA+"All req for job: "+args[1]);
+            player.sendMessage(ChatColor.GREEN+"All req for job: "+args[1]);
             for(String a : Utils.getJobVacance(args[1]))
                 player.sendMessage(a);
         }}catch (NullPointerException a){player.sendMessage("Enter a job!!!");}
+        if(args[0].equalsIgnoreCase("help")){
+            player.sendMessage(ChatColor.BLUE+"=============================================================================================");
+            player.sendMessage(ChatColor.BLUE+"/req add %jobname% %des% - Add a new job. "+ChatColor.RED+"Only for admin");
+            player.sendMessage(ChatColor.BLUE+"=============================================================================================");
+
+        }
 
     }
 }

@@ -41,7 +41,7 @@ public class Config {
             if((requestJob.get(i).substring(0,requestJob.get(i).indexOf(":"))).equalsIgnoreCase(job)){
                 if((requestJob.get(i).substring(requestJob.get(i).indexOf(":") + 1, requestJob.get(i).indexOf(":", requestJob.get(i).indexOf(":")+1)).equalsIgnoreCase(player.getDisplayName()))){
                     ((List<String>) plugin.getConfig().getList("reqJob.list")).remove(i);
-                    player.sendMessage(ChatColor.AQUA + "Delete req for "+job+" complete!");
+                    player.sendMessage(ChatColor.GREEN + "Delete req for "+job+" complete!");
                     plugin.saveConfig();
                     return true;
                 }}
@@ -55,15 +55,23 @@ public class Config {
         plugin.saveConfig();
     }
 
-    public static void addJob(String job){
-        jobList.add(job);
+    public static void addJob(String job, CommandSender sender){
+        if(!findJob(job)){
+            jobList.add(job);
+            sender.sendMessage(ChatColor.GREEN + "Add job: " + job);}
+        else sender.sendMessage(ChatColor.RED+"Job "+job+" not added");
         plugin.saveConfig();
     }
 
     public static boolean removeJob(String job){
         for(int i = 0; i < jobList.size(); i++)
             if(jobList.get(i).equalsIgnoreCase(job)){
+                for(int j = 0; j < requestJob.size(); j++)
+                    if(requestJob.get(j).substring(0,requestJob.get(j).indexOf(":")).equalsIgnoreCase(jobList.get(i)))
+                        requestJob.remove(j);
+
                 jobList.remove(i);
+                plugin.saveConfig();
                 return true;}
         plugin.saveConfig();
         return false;
