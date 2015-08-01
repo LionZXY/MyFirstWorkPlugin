@@ -1,7 +1,9 @@
 package com.lionzxy.firstplugin;
 
 import com.lionzxy.firstplugin.command.Job;
+import com.lionzxy.firstplugin.command.Req;
 import com.lionzxy.firstplugin.configs.Config;
+import com.lionzxy.firstplugin.local.Localaze;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -32,13 +34,11 @@ public class JobPlugin extends JavaPlugin{
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(label.equalsIgnoreCase("job"))
-            if(args[0].equalsIgnoreCase("reload")&&(!(sender instanceof Player) || ((sender instanceof Player)) && ((Player) sender).isOp())){
-                onDisable();
-                onEnable();
-            }else return Job.job(sender, args);
+             return Job.job(sender, args);
 
-        else if(label.equalsIgnoreCase("req")){
-            }
+        else if(label.equalsIgnoreCase("req"))
+            Req.req(sender, args);
+
 
     return false;
     }

@@ -1,11 +1,10 @@
 package com.lionzxy.firstplugin.command;
 
+import com.lionzxy.firstplugin.configs.Config;
 import com.lionzxy.firstplugin.local.Localaze;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import javax.print.attribute.standard.JobName;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,24 +12,24 @@ import java.util.List;
  * Created by nikit_000 on 01.08.2015.
  */
 public class Job {
-    public static List<String> jobId = new ArrayList<String>();
-    public static List<String> jobName = new ArrayList<String>();
+    public static List<String> jobId = new ArrayList<>();
+    public static List<String> jobName = new ArrayList<>();
 
     public static boolean job(CommandSender sender,String[] args){
 
         //check for first argument
-        try {
+        if(args.length>=1){
             //Only op or only from console
             //job add
             if (args[0].equalsIgnoreCase("add"))
-                if (!(sender instanceof Player) || ((sender instanceof Player)) && ((Player) sender).isOp()){
+                if (!(sender instanceof Player) || ((Player) sender).isOp()){
                     add(sender, args);
                     return false;}
                 else System.out.println(Localaze.ERR_PERMISION);
             //Only op or only from console
             //job remove
             if (args[0].equalsIgnoreCase("remove"))
-                if (!(sender instanceof Player) || ((sender instanceof Player)) && ((Player) sender).isOp()){
+                if (!(sender instanceof Player) || ((Player) sender).isOp()){
                     remove(sender, args);
                     return false;}
                 else System.out.println(Localaze.ERR_PERMISION);
@@ -46,7 +45,15 @@ public class Job {
                 get(sender, args);
                 return false;}
 
-        }catch (NullPointerException e){
+            //job help
+            if (args[0].equalsIgnoreCase("help"))
+                help(sender);
+
+            //job reload
+            if(args[0].equalsIgnoreCase("reload"))
+                Config.reload(sender);
+
+        }else {
             sender.sendMessage(Localaze.ERR_ARGUMENT);
             for(String a : Localaze.HELP_JOB)
                 sender.sendMessage(a);
@@ -59,17 +66,18 @@ public class Job {
             if(!findJob(args[1])) {
                 String jobIdTime = args[1];
                 String jobNameTime = "";
-                if (args.length >= 2)
+                sender.sendMessage(String.valueOf(args.length));
+                if (args.length >= 3)
                     for (int i = 2; i < args.length; i++)
-                        if (i != args.length)
+                        if (i != args.length-1)
                             jobNameTime = jobNameTime + args[i] + " ";
                         else jobNameTime = jobNameTime + args[i];
-                else jobNameTime = args[1];
+                else jobNameTime = jobIdTime;
                 jobId.add(jobIdTime);
                 jobName.add(jobNameTime);
-                sender.sendMessage(Localaze.ADD_JOB_ADD_P1 + jobIdTime + Localaze.ADD_JOB_ADD_P2 + jobNameTime);
-            }else sender.sendMessage(Localaze.ERR_JOB_ADD_ALREADY);
-        }else sender.sendMessage(Localaze.ERR_JOB_ADD_FIRST_ARG_IS_NULL);
+                sender.sendMessage(Localaze.JOB_ADD_P1 + jobIdTime + Localaze.JOB_ADD_P2 + jobNameTime);
+            }else sender.sendMessage(Localaze.JOB_ADD_ERR_ALREADY);
+        }else sender.sendMessage(Localaze.JOB_ADD_ERR_FIRST_ARG_IS_NULL);
     }
 
     static void remove(CommandSender sender,String[] args){
@@ -80,9 +88,9 @@ public class Job {
                         jobId.remove(i);
                         jobName.remove(i);
                     }
-                sender.sendMessage(Localaze.REMOVE_JOB_REMOVE+args[1]);
-            }else sender.sendMessage(Localaze.ERR_JOB_REMOVE_FOUND);
-        }else sender.sendMessage(Localaze.ERR_JOB_ADD_FIRST_ARG_IS_NULL);
+                sender.sendMessage(Localaze.JOB_REMOVE+args[1]);
+            }else sender.sendMessage(Localaze.JOB_REMOVE_ERR_FOUND);
+        }else sender.sendMessage(Localaze.JOB_ADD_ERR_FIRST_ARG_IS_NULL);
 
     }
 
@@ -98,10 +106,14 @@ public class Job {
         }else sender.sendMessage(Localaze.JOB_GET_ERR);
     }
 
+    static void help(CommandSender sender){
+        for(String a : Localaze.HELP_JOB)
+            sender.sendMessage(a);
+    }
     static int findJob(String[] args){
         String jobNameTime = "";
         for (int i = 1; i < args.length; i++)
-            if (i != args.length)
+            if (i != args.length-1)
                 jobNameTime = jobNameTime + args[i] + " ";
             else jobNameTime = jobNameTime + args[i];
         for(int i = 0; i < jobName.size(); i++)
