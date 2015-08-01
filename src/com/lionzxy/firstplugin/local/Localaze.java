@@ -10,8 +10,8 @@ public class Localaze {
     //job
     public static String JOB_ADD_ERR_ALREADY = ChatColor.RED + "[JobPlugin] This job already add";
     public static String JOB_ADD_ERR_FIRST_ARG_IS_NULL= ChatColor.RED + "[JobPlugin] For this command need %jobid%";
-    public static String JOB_ADD_P1 = ChatColor.AQUA + "[JobPlugin] Add job is successfully! With idJob = ";
-    public static String JOB_ADD_P2 = ChatColor.AQUA + " and Name Job = ";
+    public static String JOB_ADD_P1 = ChatColor.AQUA + "[JobPlugin] Add job is successfully! With idJob = "+ChatColor.WHITE;
+    public static String JOB_ADD_P2 = ChatColor.AQUA + " and Name Job = "+ChatColor.WHITE;
     public static String JOB_REMOVE = ChatColor.AQUA + "[JobPlugin] Remove job: ";
     public static String JOB_REMOVE_ERR_FOUND= ChatColor.RED + "[JobPlugin] This jobid not found";
     public static String JOB_RELOAD = ChatColor.AQUA + "[JobPlugin] Plugin reload";
@@ -25,6 +25,11 @@ public class Localaze {
     public static String REQ_ADD_ERR_JOB_NOT_FOUND = ChatColor.RED + "[JobPlugin] This job not found";
     public static String REQ_ADD_ERR_ALREADY = ChatColor.RED + "[JobPlugin] This request already add";
     public static String REQ_ADD_ERR_NOT_DESCR = ChatColor.RED + "[JobPlugin] This command need description";
+    public static String REQ_ADD_P1 = ChatColor.AQUA + "Your request for job '"+ChatColor.WHITE;
+    public static String REQ_ADD_P2 = ChatColor.AQUA + "' add!!! With description: "+ChatColor.WHITE;
+    public static String REQ_LIST_ALL = ChatColor.AQUA + "All req on page ";
+    public static String REQ_LIST_NEXT = ChatColor.AQUA + "For next page enter /req list ";
+    public static String REQ_LIST_ERR_NOT_JOB = ChatColor.RED + "This command need jobid. Use /req list jobid";
 
 
 
@@ -42,7 +47,9 @@ public class Localaze {
 
     public static String[] REQ_HELP = new String[]{
             HELP_LINE,
-
+            ChatColor.AQUA + "1./req add %jobid% %description% for add request.",
+            ChatColor.AQUA + "/req help for get help on req command",
+            ChatColor.AQUA + "/req list %jobid% %page% for see all req",
             HELP_LINE
     };
 

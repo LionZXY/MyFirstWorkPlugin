@@ -66,7 +66,6 @@ public class Job {
             if(!findJob(args[1])) {
                 String jobIdTime = args[1];
                 String jobNameTime = "";
-                sender.sendMessage(String.valueOf(args.length));
                 if (args.length >= 3)
                     for (int i = 2; i < args.length; i++)
                         if (i != args.length-1)
@@ -109,6 +108,14 @@ public class Job {
     static void help(CommandSender sender){
         for(String a : Localaze.HELP_JOB)
             sender.sendMessage(a);
+    }
+
+    static String getName(String jobid){
+        for(int i = 0; i < jobId.size(); i++)
+            if(jobId.get(i).equalsIgnoreCase(jobid))
+                return jobName.get(i);
+
+        return null;
     }
     static int findJob(String[] args){
         String jobNameTime = "";
