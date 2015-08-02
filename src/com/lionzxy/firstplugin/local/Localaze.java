@@ -25,11 +25,16 @@ public class Localaze {
     public static String REQ_ADD_ERR_JOB_NOT_FOUND = ChatColor.RED + "[JobPlugin] This job not found";
     public static String REQ_ADD_ERR_ALREADY = ChatColor.RED + "[JobPlugin] This request already add";
     public static String REQ_ADD_ERR_NOT_DESCR = ChatColor.RED + "[JobPlugin] This command need description";
-    public static String REQ_ADD_P1 = ChatColor.AQUA + "Your request for job '"+ChatColor.WHITE;
+    public static String REQ_ADD_P1 = ChatColor.AQUA + "[JobPlugin] Your request for job '"+ChatColor.WHITE;
     public static String REQ_ADD_P2 = ChatColor.AQUA + "' add!!! With description: "+ChatColor.WHITE;
-    public static String REQ_LIST_ALL = ChatColor.AQUA + "All req on page ";
-    public static String REQ_LIST_NEXT = ChatColor.AQUA + "For next page enter /req list ";
-    public static String REQ_LIST_ERR_NOT_JOB = ChatColor.RED + "This command need jobid. Use /req list jobid";
+    public static String REQ_REMOVE_ERR_NOT_JOB = ChatColor.RED + "[JobPlugin] Enter jobid! /req remove %jobid%";
+    public static String REQ_REMOVE_ERR_NOT_FOUND_REQ = ChatColor.RED + "[JobPlugin] Not found request for job " + ChatColor.WHITE;
+    public static String REQ_REMOVE_P1 = ChatColor.AQUA + "[JobPlugin] Remove req for job " + ChatColor.WHITE;
+    public static String REQ_REMOVE_P2 = ChatColor.AQUA + " by " + ChatColor.WHITE;
+    public static String REQ_TOP = ChatColor.AQUA + "[JobPlugin] Top req for job";
+    public static String REQ_LIST_ALL = ChatColor.AQUA + "[JobPlugin] All req on page ";
+    public static String REQ_LIST_NEXT = ChatColor.AQUA + "[JobPlugin] For next page enter /req list ";
+    public static String REQ_LIST_ERR_NOT_JOB = ChatColor.RED + "[JobPlugin] This command need jobid. Use /req list jobid";
 
 
 
@@ -48,6 +53,7 @@ public class Localaze {
     public static String[] REQ_HELP = new String[]{
             HELP_LINE,
             ChatColor.AQUA + "1./req add %jobid% %description% for add request.",
+            ChatColor.AQUA + "2./req remove %jobid% for remove your request",
             ChatColor.AQUA + "/req help for get help on req command",
             ChatColor.AQUA + "/req list %jobid% %page% for see all req",
             HELP_LINE
